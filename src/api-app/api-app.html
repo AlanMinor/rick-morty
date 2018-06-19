@@ -83,6 +83,50 @@
             .paper__listbox{
                 --paper-listbox-background-color: var(--drawer-menu-color);
             }
+
+
+            .tabs{
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                -ms-flex-align: center;
+                -webkit-align-items: center;
+                align-items: center;
+                height: 48px;
+                font-size: 14px;
+                font-weight: 500;
+                overflow: hidden;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -webkit-user-select: none;
+                user-select: none;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                -webkit-tap-highlight-color: transparent;
+
+                height: 100%;
+                max-width: 640px;
+            }
+            .tab{
+                display: -ms-inline-flexbox;
+                display: -webkit-inline-flex;
+                display: inline-flex;
+                -ms-flex-align: center;
+                -webkit-align-items: center;
+                align-items: center;
+                -ms-flex-pack: center;
+                -webkit-justify-content: center;
+                justify-content: center;
+                -ms-flex: 1 1 auto;
+                -webkit-flex: 1 1 auto;
+                flex: 1 1 auto;
+                position: relative;
+                padding: 0 12px;
+                overflow: hidden;
+                cursor: pointer;
+                vertical-align: middle;
+                font-family: 'Roboto', 'Noto', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
             .paper__tabs{
                 --paper-tabs-selection-bar-color: black;
                 height: 100%;
@@ -132,11 +176,18 @@
                     </app-toolbar>
                     <app-toolbar class="app__header__toolbar--center" hidden$="{{!wideLayout}}">
                         <!-- Nav en el escritorio: Pestañas -->
-                        <paper-tabs class="paper__tabs" selected="[[page]]" attr-for-selected="name">
-                            <template is="dom-repeat" items="{{items}}">
-                                <paper-tab class="paper__tabs__tab" name$="{{item}}" on-click="_clickTabSelector">{{item}}</paper-tab>
-                            </template>
-                        </paper-tabs>
+                        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+
+                            <div class="tabs">
+                                <template is="dom-repeat" items="{{items}}">
+
+                                    <div class="tab">
+                                        <a name="[[item]]" href="/[[item]]" class="paper__item__link">[[item]]</a>
+                                    </div>
+                                </template>
+                            </div>
+
+                        </iron-selector>
                     </app-toolbar>
                 </app-header>
             </app-header-layout>
@@ -227,6 +278,8 @@
             }
 
             _pageChanged(page) {
+
+                console.log('_pageChanged',page);
                 // Load page import on demand. Show 404 page if fails
                 const resolvedPageUrl = this.resolveUrl('../views/view-' + page + '.html');
 
@@ -249,7 +302,7 @@
                 }
             }
             _clickTabSelector(e){
-                this.page = e.target.getAttribute('name');
+                this.routeData.page = this.page;
             }
         }
 
