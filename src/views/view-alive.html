@@ -7,11 +7,9 @@
   <template>
     <style include="shared-styles">
       :host {
-        align-content: center;
         display: block;
-        height: 100%;
+
         padding: 10px;
-        width: 100%;
       }
     </style>
 
@@ -25,7 +23,9 @@
 
     <template is="dom-repeat" items="[[characterLisr.results]]" as="characters">
         <!--AQUI VA EL COMPONENTE DE LA CARD CON SUS PROPIEDADES-->
-        <contact-component name="[[characters.name]]" status="[[characters.status]]" specie="[[characters.species]]" gender="[[characters.gender" image ="[[characters.image]]" origin="[[characters.origin.name]]" descrip="[[characters.created]"></contact-component>
+        <div class="este">
+            <contact-component name="[[characters.name]]" status="[[characters.status]]" specie="[[characters.species]]" gender="[[characters.gender" image ="[[characters.image]]" origin="[[characters.origin.name]]" descrip="[[characters.created]"></contact-component>
+        </div>
         
     </template>
 
