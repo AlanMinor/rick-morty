@@ -11,17 +11,13 @@
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
-
-
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
-
 <link rel="import" href="../icons/app-icons.html">
-
 <link rel="lazy-import" href="../views/view-all.html">
 <link rel="lazy-import" href="../views/view-alive.html">
 <link rel="lazy-import" href="../views/view-dead.html">
@@ -56,11 +52,7 @@
                 --paper-input-container-color:       rgba(255, 255, 255, 0.64);
                 --paper-input-container-focus-color: rgba(255, 255, 255, 1);
                 --paper-input-container-input-color: #fff;
-
-
-
             }
-
             .app__header{
                 box-shadow: var(--app-header-box-shadow-default);
             }
@@ -100,19 +92,26 @@
                 --paper-tab-ink: #aaa;
                 text-transform: uppercase;
             }
+            .paper__item{
+                margin: 0 20px;
+            }
+            .paper__item__link{
+                display: block;
+                padding: 0 16px;
+                text-decoration: none;
+                line-height: 40px;
+            }
+            #drawer{
+                --app-drawer-content-container:{
+                    background-color: whitesmoke;
+                }
+            }
             [hidden] {
                 display: none !important;
             }
 
 
     </style>
-
-        <iron-ajax
-                auto
-                url="https://pokeapi.co/api/v2/pokemon/"
-                handle-as="json"
-                last-response="{{response}}"
-        ></iron-ajax>
 
         <app-location route="{{route}}"></app-location>
         <app-route
@@ -147,9 +146,9 @@
                 <!-- Nav en el dispositivo: side nav menu -->
                 <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
                     <template is="dom-repeat" items="{{items}}">
-                        <paper-icon-item name$="{{item}}">
+                        <paper-icon-item name$="{{item}}" class="paper__item">
                             <iron-icon icon="app-icons:{{item}}" slot="item-icon"></iron-icon>
-                            <a name="[[item]]" href="/[[item]]">[[item]]</a>
+                            <a name="[[item]]" href="/[[item]]" class="paper__item__link">[[item]]</a>
                         </paper-icon-item>
                     </template>
                 </iron-selector>
