@@ -1,8 +1,8 @@
-
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../styles/shared-styles.html">
+<!--<link rel="import" href="../styles/shared-styles.html">-->
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
-<dom-module id="my-view3">
+<dom-module id="view-dead">
   <template>
     <style include="shared-styles">
       :host {
@@ -12,19 +12,35 @@
       }
     </style>
 
-    <div class="card">
+    <iron-ajax
+    auto
+    url="https://rickandmortyapi.com/api/character/?status=dead"
+    handle-as="json"
+    on-response="handleResponse"
+    last-response={{characterLisr}}
+    on-error="onError"></iron-ajax>
+
+    <template is="dom-repeat" items="[[characterLisr.results]]" as="characters">
+        <!--AQUI VA EL COMPONENTE DE LA CARD CON SUS PROPIEDADES-->
+        <p>[[characters.name]]</p>
+        <p>[[characters.status]]</p>
+        <p>[[characters.species]]</p>
+        <p>[[characters.image]]</p>
+    </template>
+
+    <!--<div class="card">
       <div class="circle">3</div>
       <h1>View Dead</h1>
       <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
       <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
+    </div>-->
   </template>
 
   <script>
-    class MyView3 extends Polymer.Element {
-      static get is() { return 'my-view3'; }
+    class ViewDead extends Polymer.Element {
+      static get is() { return 'view-dead'; }
     }
 
-    window.customElements.define(MyView3.is, MyView3);
+    window.customElements.define(ViewDead.is, ViewDead);
   </script>
 </dom-module>
