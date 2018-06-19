@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../styles/shared-styles.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../component/contact-components.html">
 
 <dom-module id="view-unknow">
   <template>
@@ -22,10 +23,7 @@
 
     <template is="dom-repeat" items="[[characterLisr.results]]" as="characters">
         <!--AQUI VA EL COMPONENTE DE LA CARD CON SUS PROPIEDADES-->
-        <p>[[characters.name]]</p>
-        <p>[[characters.status]]</p>
-        <p>[[characters.species]]</p>
-        <p>[[characters.image]]</p>
+        <contact-component name="[[characters.name]]" status="[[characters.status]]" specie="[[characters.species]]" gender="[[characters.gender" image ="[[characters.image]]" origin="[[characters.origin.name]]" descrip="[[characters.created]"></contact-component>
     </template>
 
     <!--<div class="card">
