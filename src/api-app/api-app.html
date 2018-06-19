@@ -60,21 +60,17 @@
             }
     </style>
 
-        <iron-ajax
+        <!--<iron-ajax
                 auto
                 url="https://pokeapi.co/api/v2/pokemon/"
                 handle-as="json"
                 last-response="{{response}}"
-        ></iron-ajax>
+        ></iron-ajax>-->
 
-        <app-location
-                route="{{route}}"
-                url-space-regex="^[[rootPath]]">
-        </app-location>
-
+        <app-location route="{{route}}"></app-location>
         <app-route
                 route="{{route}}"
-                pattern="[[rootPath]]:page"
+                pattern="/:page"
                 data="{{routeData}}"
                 tail="{{subroute}}">
         </app-route>
@@ -84,10 +80,10 @@
             <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
                 <app-toolbar>Menu</app-toolbar>
                 <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                    <a name="view-all" href="[[rootPath]]view-all">All</a>
-                    <a name="view-alive" href="[[rootPath]]view-alive">Alive</a>
-                    <a name="view-dead" href="[[rootPath]]view-dead">dead</a>
-                    <a name="view-unknow" href="[[rootPath]]view-unknow">Unknow</a>
+                    <a name="view-all" href="/all">All</a>
+                    <a name="view-alive" href="/alive">Alive</a>
+                    <a name="view-dead" href="/dead">dead</a>
+                    <a name="view-unknow" href="/unknow">Unknow</a>
                 </iron-selector>
             </app-drawer>
 
@@ -96,7 +92,7 @@
 
                 <app-header slot="header" condenses reveals effects="waterfall">
                     <app-toolbar>
-                        <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
+                        <paper-icon-button icon="app-icons:menu" drawer-toggle></paper-icon-button>
                         <div main-title>My App</div>
                     </app-toolbar>
                 </app-header>
@@ -107,10 +103,10 @@
                         fallback-selection="page404"
                         role="main">
 
-                    <view-all name="view-all"></view-all>
-                    <view-alive name="view-alive"></view-alive>
-                    <view-dead name="view-dead"></view-dead>
-                    <view-dead name="view-unknow"></view-dead>
+                    <view-all name="all"></view-all>
+                    <view-alive name="alive"></view-alive>
+                    <view-dead name="dead"></view-dead>
+                    <view-unknow name="unknow"></view-unknow>
                     <view-page404 name="page404"></view-page404>
 
                 </iron-pages>
@@ -141,20 +137,18 @@
                         observer: '_pageChanged',
                     },
                     routeData: Object,
-                    subroute: Object,
-                    // This shouldn't be neccessary, but the Analyzer isn't picking up
-                    // Polymer.Element#rootPath
-                    rootPath: String,
+                    subroute: Object
             };
         }
 
         static get observers() {
             return [
-                '_ver(response)',
-                '_routePageChanged(routeData.page)',
+                '_routePageChanged(routeData.page)'
+
             ]
         }
         _routePageChanged(page) {
+
             // If no page was found in the route data, page will be an empty string.
             // Default to 'view1' in that case.
             this.page = page || 'all';
@@ -166,12 +160,8 @@
         }
 
         _pageChanged(page) {
-
-            console.log('page',page);
             // Load page import on demand. Show 404 page if fails
-            const resolvedPageUrl = this.resolveUrl('view-' + page + '.html');
-
-            console.log('resolvedPageUrl',resolvedPageUrl);
+            const resolvedPageUrl = this.resolveUrl('../views/view-' + page + '.html');
 
             Polymer.importHref(
                 resolvedPageUrl,
@@ -181,12 +171,9 @@
         }
 
         _showPage404() {
-            this.page = 'view404';
+            this.page = 'page404';
         }
 
-      _ver(val){
-          console.log("ver",val);
-      }
     }
 
     window.customElements.define(ApiApp.is, ApiApp);
