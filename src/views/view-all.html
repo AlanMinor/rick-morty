@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../styles/shared-styles.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="view-all">
   <template>
@@ -10,6 +11,22 @@
         padding: 10px;
       }
     </style>
+
+    <iron-ajax
+    auto
+    url="https://rickandmortyapi.com/api/character"
+    handle-as="json"
+    on-response="handleResponse"
+    last-response={{characterLisr}}
+    on-error="onError"></iron-ajax>
+
+    <template is="dom-repeat" items="[[characterLisr.results]]" as="characters">
+      <!--AQUI VA EL COMPONENTE DE LA CARD CON SUS PROPIEDADES-->
+       <p>[[characters.name]]</p>
+       <p>[[characters.status]]</p>
+       <p>[[characters.species]]</p>
+       <p>[[characters.image]]</p>
+    </template>
 
     <div class="card">
       <div class="circle">1</div>
@@ -22,6 +39,10 @@
   <script>
     class ViewAll extends Polymer.Element {
       static get is() { return 'view-all'; }
+
+      onError(e){
+          console.log(e);
+      }
     }
 
     window.customElements.define(ViewAll.is, ViewAll);
