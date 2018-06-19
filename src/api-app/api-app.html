@@ -1,15 +1,24 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+
+
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="../icons/app-icons.html">
 
@@ -22,42 +31,80 @@
 <dom-module id="api-app">
     <template>
         <style>
-            :host {
-                --app-primary-color: #4285f4;
-                --app-secondary-color: black;
+            :host{
+                --dark-primary-color:       #1976D2;
+                --default-primary-color:    #2196F3;
+                --light-primary-color:      #BBDEFB;
+                --text-primary-color:       #FFFFFF;
+                --accent-color:             #FFEB3B;
+                --primary-background-color: #BBDEFB;
+                --primary-text-color:       #212121;
+                --secondary-text-color:     #757575;
+                --disabled-text-color:      #BDBDBD;
+                --divider-color:            #BDBDBD;
+                /* Components */
 
-                display: block;
+                --app-header-box-shadow-default: 0 5px 6px -3px rgba(0, 0, 0, 0.4);
+                /* paper-drawer-panel */
+                --drawer-menu-color:           #ffffff;
+                --drawer-border-color:         1px solid #ccc;
+                --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+                /* paper-menu */
+                --paper-menu-background-color: #fff;
+                --menu-link-color:             #111111;
+                /* paper-input */
+                --paper-input-container-color:       rgba(255, 255, 255, 0.64);
+                --paper-input-container-focus-color: rgba(255, 255, 255, 1);
+                --paper-input-container-input-color: #fff;
+
+
+
             }
 
-            app-drawer-layout:not([narrow]) [drawer-toggle] {
-                display: none;
+            .app__header{
+                box-shadow: var(--app-header-box-shadow-default);
             }
-
-            app-header {
-                color: #fff;
-                background-color: var(--app-primary-color);
+            .app__header__title{
+                text-align: center;
+                color: var(--text-primary-color);
             }
-
-            app-header paper-icon-button {
-                --paper-icon-button-ink-color: white;
-            }
-
-            .drawer-list {
-                margin: 0 20px;
-            }
-
-            .drawer-list a {
-                display: block;
-                padding: 0 16px;
+            .app__header__link{
+                font-size: 16px;
+                font-weight: 600;
+                letter-spacing: 0.3em;
+                color: var(--app-primary-color);
                 text-decoration: none;
-                color: var(--app-secondary-color);
-                line-height: 40px;
+                /* required for IE 11, so this <a> can receive pointer events */
+                display: inline-block;
+                pointer-events: auto;
+            }
+            .app__header__toolbar{
+                background-color: var(--dark-primary-color);
+            }
+            .app__header__toolbar--center{
+                background-color: var(--light-primary-color);
+                justify-content: center;
+            }
+            .paper__icon__button__menu{
+                color: var(--text-primary-color);
+            }
+            .paper__listbox{
+                --paper-listbox-background-color: var(--drawer-menu-color);
+            }
+            .paper__tabs{
+                --paper-tabs-selection-bar-color: black;
+                height: 100%;
+                max-width: 640px;
+            }
+            .paper__tabs__tab{
+                --paper-tab-ink: #aaa;
+                text-transform: uppercase;
+            }
+            [hidden] {
+                display: none !important;
             }
 
-            .drawer-list a.iron-selected {
-                color: black;
-                font-weight: bold;
-            }
+
     </style>
 
         <!--<iron-ajax
@@ -75,47 +122,56 @@
                 tail="{{subroute}}">
         </app-route>
 
-        <app-drawer-layout fullbleed narrow="{{narrow}}">
-            <!-- Drawer content -->
-            <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-                <app-toolbar>Menu</app-toolbar>
-                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                    <a name="view-all" href="/all">All</a>
-                    <a name="view-alive" href="/alive">Alive</a>
-                    <a name="view-dead" href="/dead">dead</a>
-                    <a name="view-unknow" href="/unknow">Unknow</a>
-                </iron-selector>
-            </app-drawer>
-
-            <!-- Main content -->
-            <app-header-layout has-scrolling-region>
-
-                <app-header slot="header" condenses reveals effects="waterfall">
-                    <app-toolbar>
-                        <paper-icon-button icon="app-icons:menu" drawer-toggle></paper-icon-button>
-                        <div main-title>My App</div>
+        <app-drawer-layout force-narrow>
+            <app-header-layout>
+                <app-header class="app__header" slot="header">
+                    <app-toolbar class="app__header__toolbar">
+                        <paper-icon-button class="paper__icon__button__menu" icon="app-icons:menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
+                        <div class="app__header__title" main-title>
+                            <a class="app__header__link" href="/" aria-label="Rick and Morthy Characters Home">Rick and Morthy Characters</a>
+                        </div>
+                    </app-toolbar>
+                    <app-toolbar class="app__header__toolbar--center" hidden$="{{!wideLayout}}">
+                        <!-- Nav en el escritorio: Pestañas -->
+                        <paper-tabs class="paper__tabs" selected="[[page]]" attr-for-selected="name">
+                            <template is="dom-repeat" items="{{items}}">
+                                <paper-tab class="paper__tabs__tab" name$="{{item}}" on-click="_clickTabSelector">{{item}}</paper-tab>
+                            </template>
+                        </paper-tabs>
                     </app-toolbar>
                 </app-header>
-
-                <iron-pages
-                        selected="[[page]]"
-                        attr-for-selected="name"
-                        fallback-selection="page404"
-                        role="main">
-
-                    <view-all name="all"></view-all>
-                    <view-alive name="alive"></view-alive>
-                    <view-dead name="dead"></view-dead>
-                    <view-unknow name="unknow"></view-unknow>
-                    <view-page404 name="page404"></view-page404>
-
-                </iron-pages>
             </app-header-layout>
+            <!-- Menu aside para dispositivos-->
+            <app-drawer id="drawer" slot="drawer">
+                <app-toolbar class="app__drawer__toolbar">Menu</app-toolbar>
+                <!-- Nav en el dispositivo: side nav menu -->
+                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                    <template is="dom-repeat" items="{{items}}">
+                        <paper-icon-item name$="{{item}}">
+                            <iron-icon icon="app-icons:{{item}}" slot="item-icon"></iron-icon>
+                            <a name="[[item]]" href="/[[item]]">[[item]]</a>
+                        </paper-icon-item>
+                    </template>
+                </iron-selector>
+            </app-drawer>
         </app-drawer-layout>
 
+        <iron-pages
+                selected="[[page]]"
+                attr-for-selected="name"
+                selected-attribute="visible"
+                fallback-selection="page404"
+                role="main">
 
+            <view-all name="all"></view-all>
+            <view-alive name="alive"></view-alive>
+            <view-dead name="dead"></view-dead>
+            <view-unknow name="unknow"></view-unknow>
+            <view-page404 name="page404"></view-page404>
 
+        </iron-pages>
 
+        <iron-media-query query="min-width: 600px" query-matches="{{wideLayout}}"></iron-media-query>
 
 
   </template>
@@ -127,54 +183,76 @@
          * @polymer
          */
         class ApiApp extends Polymer.Element {
-        static get is() { return 'api-app'; }
-        static get properties() {
-            return {
-                response: Object,
+            static get is() {
+                return 'api-app';
+            }
+
+            static get properties() {
+                return {
+                    response: Object,
                     page: {
                         type: String,
                         reflectToAttribute: true,
                         observer: '_pageChanged',
                     },
                     routeData: Object,
-                    subroute: Object
-            };
-        }
+                    subroute: Object,
 
-        static get observers() {
-            return [
-                '_routePageChanged(routeData.page)'
+                    items: {
+                        type: Array,
+                        value: function () {
+                            return ['all', 'alive', 'dead', 'unknow'];
+                        }
+                    },
 
-            ]
-        }
-        _routePageChanged(page) {
+                    /*selected: {type: String, value: 'All'},*/
+                    wideLayout: {
+                        type: Boolean,
+                        value: false,
+                        observer: 'onLayoutChange',
+                    },
+                };
+            }
 
-            // If no page was found in the route data, page will be an empty string.
-            // Default to 'view1' in that case.
-            this.page = page || 'all';
+            static get observers() {
+                return [
+                    '_routePageChanged(routeData.page)'
 
-            // Close a non-persistent drawer when the page & route are changed.
-            if (!this.$.drawer.persistent) {
-                this.$.drawer.close();
+                ]
+            }
+
+            _routePageChanged(page) {
+                // If no page was found in the route data, page will be an empty string.
+                // Default to 'view1' in that case.
+                this.page = page || 'all';
+            }
+
+            _pageChanged(page) {
+                // Load page import on demand. Show 404 page if fails
+                const resolvedPageUrl = this.resolveUrl('../views/view-' + page + '.html');
+
+                Polymer.importHref(
+                    resolvedPageUrl,
+                    null,
+                    this._showPage404.bind(this),
+                    true);
+            }
+
+            _showPage404() {
+                this.page = 'page404';
+            }
+
+            onLayoutChange(wide) {
+                let drawer = this.$.drawer;
+
+                if (wide && drawer.opened) {
+                    drawer.opened = false;
+                }
+            }
+            _clickTabSelector(e){
+                this.page = e.target.getAttribute('name');
             }
         }
-
-        _pageChanged(page) {
-            // Load page import on demand. Show 404 page if fails
-            const resolvedPageUrl = this.resolveUrl('../views/view-' + page + '.html');
-
-            Polymer.importHref(
-                resolvedPageUrl,
-                null,
-                this._showPage404.bind(this),
-                true);
-        }
-
-        _showPage404() {
-            this.page = 'page404';
-        }
-
-    }
 
     window.customElements.define(ApiApp.is, ApiApp);
   </script>
