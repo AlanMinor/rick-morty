@@ -1,49 +1,35 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../styles/shared-styles.html">
-<link rel="import" href="../component/contact-components.html">
-
+<link rel="import" href="../../src/component/component-list.html">
 
 <dom-module id="view-all">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
 
-        padding: 10px;
-      }
-    </style>
+            }
+        </style>
 
-    <iron-ajax
-    auto
-    url="https://rickandmortyapi.com/api/character"
-    handle-as="json"
-    on-response="handleResponse"
-    last-response={{characterLisr}}
-    on-error="onError"></iron-ajax>
+        <iron-ajax
+            auto
+            url="https://rickandmortyapi.com/api/character"
+            handle-as="json"
+            last-response={{response}}
+            on-error="_onError"
+        ></iron-ajax>
 
-    <template is="dom-repeat" items="[[characterLisr.results]]" as="characters">
-      <!--AQUI VA EL COMPONENTE DE LA CARD CON SUS PROPIEDADES-->
-      <contact-component name="[[characters.name]]" status="[[characters.status]]" specie="[[characters.species]]" gender="[[characters.gender" image ="[[characters.image]]" origin="[[characters.origin.name]]" descrip="[[characters.created]"></contact-component>
-    </template>
+      <component-list data="{{response}}"></component-list>
 
-    <!--<<div class="card">
-      <div class="circle">1</div>
-      <h1>View All</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>-->
   </template>
 
   <script>
-    class ViewAll extends Polymer.Element {
-      static get is() { return 'view-all'; }
-
-      onError(e){
-          console.log(e);
+      class ViewAll extends Polymer.Element {
+          static get is() { return 'view-all'; }
+          _onError(e){
+              console.log(e);
+          }
       }
-    }
 
-    window.customElements.define(ViewAll.is, ViewAll);
+      window.customElements.define(ViewAll.is, ViewAll);
   </script>
 </dom-module>
