@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../styles/component-list-styles.html">
+<link rel="import" href="../component/contact-components.html">
+
 
 <dom-module id="component-list">
     <template>
@@ -15,7 +17,7 @@
         <section class="section">
             <template is="dom-repeat" items="[[data.results]]" as="characters">
                 <!-- Aqui deberia ir el componente de las tarjetas-->
-
+                <contact-component name="[[characters.name]]" status="[[characters.status]]" specie="[[characters.species]]" gender="[[characters.gender" image ="[[characters.image]]" origin="[[characters.origin.name]]" descrip="[[characters.created]"></contact-component>
             </template>
         </section>
     </template>
