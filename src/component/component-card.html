@@ -60,17 +60,18 @@
 					return{
 					}
 				}
-                static get observers() {
-                    return [
-                        '_see(data)'
 
-                    ]
-                }
-
-                _see(data){
-				    console.log("data",data);
-
+                ready(){
+				    super.ready();
+                    this.addEventListener('click', e => this._onClickCard(e));
 				}
+
+                _onClickCard(e){
+                    this.dispatchEvent(new CustomEvent('_onClickCard',{bubbles: true, composed: true,
+						detail:{target:e.target}
+                    }));
+				}
+
 			}
 			customElements.define(ComponentCard.is, ComponentCard)
 		})();

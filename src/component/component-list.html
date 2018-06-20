@@ -24,7 +24,7 @@
         </style>
 
         <section class="section">
-            <template is="dom-repeat" items="[[data.results]]" as="characters">
+            <template is="dom-repeat" items="[[data.results]]" as="characters" id="template_card">
                 <component-card data="[[characters]]"></component-card>
             </template>
         </section>
@@ -33,6 +33,17 @@
     <script>
         class ComponentList extends Polymer.Element {
             static get is() { return 'component-list'; }
+            ready(){
+                super.ready();
+                this.addEventListener('_onClickCard', e => this._onClickCard(e));
+            }
+            _onClickCard(e){
+                const data = this.$.template_card.itemForElement(e.detail.target);
+                this.dispatchEvent(new CustomEvent('_showDetail',{bubbles: true, composed: true,
+                    detail:{data:data}
+                }));
+            }
+
         }
         window.customElements.define(ComponentList.is, ComponentList);
     </script>

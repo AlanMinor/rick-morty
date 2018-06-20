@@ -247,15 +247,12 @@
                     },
                     routeData: Object,
                     subroute: Object,
-
                     items: {
                         type: Array,
                         value: function () {
                             return ['all', 'alive', 'dead', 'unknow'];
                         }
                     },
-
-                    /*selected: {type: String, value: 'All'},*/
                     wideLayout: {
                         type: Boolean,
                         value: false,
@@ -270,6 +267,10 @@
 
                 ]
             }
+            ready(){
+                super.ready();
+                this.addEventListener('_showDetail', e => this._showDetail(e));
+            }
 
             _routePageChanged(page) {
                 // If no page was found in the route data, page will be an empty string.
@@ -279,7 +280,6 @@
 
             _pageChanged(page) {
 
-                console.log('_pageChanged',page);
                 // Load page import on demand. Show 404 page if fails
                 const resolvedPageUrl = this.resolveUrl('../views/view-' + page + '.html');
 
@@ -301,9 +301,11 @@
                     drawer.opened = false;
                 }
             }
-            _clickTabSelector(e){
-                this.routeData.page = this.page;
+
+            _showDetail(e){
+                console.log("datos de la tarjeta",e.detail.data);
             }
+
         }
 
     window.customElements.define(ApiApp.is, ApiApp);
