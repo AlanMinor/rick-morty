@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../src/component/component-list.html">
+
+<dom-module id="view-list">
+    <template>
+        <style>
+            :host {
+            }
+        </style>
+
+        <app-route
+                route="[[route]]"
+                pattern="/:status"
+                data="{{routeData}}"
+        ></app-route>
+
+        <iron-ajax
+                auto
+                url="[[_validateStatus(routeData.status)]]"
+                handle-as="json"
+                last-response={{response}}
+        ></iron-ajax>
+
+        <component-list data="{{response}}"></component-list>
+
+    </template>
+
+    <script>
+        class ViewList extends Polymer.Element{
+            static get is(){ return 'view-list'; }
+            static get properties() {
+                return {
+                    route: Object,
+                    routeData: Object,
+                    visible: {
+                        type: Boolean,
+                        value: false
+                    }
+                };
+            }
+            static get observers() {
+                return [
+                    '_categoryChanged(routeData.status, visible)'
+                ]
+            }
+            _categoryChanged(status, visible) {
+
+                if (!visible) {
+                    return;
+                }
+
+                this._changeSectionDebouncer = Polymer.Debouncer.debounce(this._changeSectionDebouncer,
+                    Polymer.Async.microTask, () => {
+                        if (status) {
+                            // Notify the category and the page's title
+                            this.dispatchEvent(new CustomEvent('change-section', {
+                                bubbles: true, composed: true, detail: {
+                                    status: status
+                                }}));
+                        } else {
+                            this.dispatchEvent(new CustomEvent('show-invalid-url-warning', {
+                                bubbles: true, composed: true}));
+                        }
+                    });
+            }
+            _validateStatus(status){
+                let url = '';
+                if(status === 'all'){
+                    url = 'https://rickandmortyapi.com/api/character'
+                }else{
+                    url = `https://rickandmortyapi.com/api/character/?status=${status}`;
+                }
+                return url;
+            }
+
+
+        }
+        window.customElements.define(ViewList.is, ViewList);
+    </script>
+</dom-module>

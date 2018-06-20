@@ -1,20 +1,31 @@
-<link rel="import" href="/bower_components/polymer/polymer-element.html">
-<link rel="import" href="header-detail.html">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<!--<link rel="import" href="header-detail.html">-->
 
 <dom-module id="component-detail">
     <template>
         <style>
+            :host {
+            }
         </style>
 
-        <header-detail></header-detail>
+        <h1>Este es el componente de detalle</h1>
+
+        <!--<header-detail></header-detail>-->
     </template>
 
     <script>
-        ( function componentDetail(customElements){
-            'use-strict';
-            class ComponentDetail extends Polymer.Element{
-                static get is(){ return 'component-detail'; }
+        class ComponentDetail extends Polymer.Element{
+            static get is(){ return 'component-detail'; }
+            static get observers() {
+                return [
+                    '_verData(data)'
+
+                ]
             }
-        })(window.customElements);
+            _verData(data){
+                console.log("data",data);
+            }
+        }
+        window.customElements.define(ComponentDetail.is, ComponentDetail);
     </script>
 </dom-module>

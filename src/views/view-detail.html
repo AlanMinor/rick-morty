@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
 
 <dom-module id="view-detail">
     <template>
@@ -7,11 +8,36 @@
             }
         </style>
 
+        <app-route
+                route="[[route]]"
+                pattern="/:category/:item"
+                data="{{routeData}}"
+        ></app-route>
+
     </template>
 
     <script>
         class ViewDetail extends Polymer.Element {
             static get is() { return 'view-detail'; }
+            static get properties() {
+                return {
+                    item: Object,
+
+                    route: Object,
+
+                    routeData: Object,
+
+                    visible: {
+                        type: Boolean,
+                        value: false
+                    },
+                };
+            }
+            static get observers() {
+                return [
+                    '_itemChanged(item, visible)'
+                ]
+            }
 
         }
         window.customElements.define(ViewDetail.is, ViewDetail);
