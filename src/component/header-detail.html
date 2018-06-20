@@ -2,7 +2,7 @@
 
 <dom-module id="header-detail">
   <template>
-    <style include="shared-styles">
+    <style>
       :host {
       }
 
@@ -88,27 +88,27 @@
     <div class="heder_detail">
         <div id="content_info" class="status">
           <img id="icon" src="/src/img/usuario.png">
-          <p>Status: Alive</p>
+          <p>Status: [[status]]</p>
         </div>
         <div id="content_info" class="specie">
           <img id="icon" src="/src/img/red.png">
-          <p>Specie: Human</p>
+          <p>Specie: [[specie]]</p>
         </div>
         <div id="content_info" class="gender">
           <img id="icon" src="/src/img/usuarios.png">
-          <p>Gender: Male</p>
+          <p>Gender: [[gender]]</p>
         </div>
         <div id="content_info" class="origin">
           <img id="icon" src="/src/img/el-planeta-tierra.png">
-          <p>Origin: Earth (C-137)</p>
+          <p>Origin: [[origin]]</p>
         </div>
         <div id="content_info" class="location">
           <img id="icon" src="/src/img/casa.png">
-          <p>Location: Earth (Replacement Dimension)</p>
+          <p>Location: [[location]]</p>
         </div>
         <div id="content_info" class="description">
           <img id="icon" src="/src/img/ayudar.png">
-          <p>Description: 2017-11-04T18:48:46.250Z</p>
+          <p>Created: [[created]]</p>
         </div>
     </div>
 
@@ -117,6 +117,35 @@
   <script>
     class HeaderDetail extends Polymer.Element {
       static get is() { return 'header-detail'; }
+
+      /*static get properties(){
+					return{
+            status: {
+              type: String,
+              value: ''
+            },
+            specie: {
+              type: String,
+              value: ''
+            },
+            gender: {
+              type: String,
+              value: ''
+            },
+            origin: {
+              type: String,
+              value: ''
+            },
+            location: {
+              type: String,
+              value: ''
+            },
+            created: {
+              type: String,
+              value: ''
+            }
+					};
+				}*/
     }
 
     window.customElements.define(HeaderDetail.is, HeaderDetail);
