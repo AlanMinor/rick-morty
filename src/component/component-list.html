@@ -1,33 +1,39 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../styles/component-list-styles.html">
-<link rel="import" href="../component/contact-components.html">
-
+<link rel="import" href="../component/component-card.html">
 
 <dom-module id="component-list">
     <template>
-        <style include="component-list-styles">
+        <style>
             :host {
-                display: block;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
+                border: 1px solid #ddd;
+                background: #f1f1f1;
+                padding: 0;
+                margin: 0;
+            }
+            .section{
+                position: fixed;
+                left: 0;
+                top: 130px;
+                bottom: 0;
+                right: 0;
+                margin: 10px;
+                padding: 10px;
+                overflow-y: auto;
+                overflow-x: hidden;
             }
         </style>
 
         <section class="section">
             <template is="dom-repeat" items="[[data.results]]" as="characters">
-                <!-- Aqui deberia ir el componente de las tarjetas-->
-                <contact-component name="[[characters.name]]" status="[[characters.status]]" specie="[[characters.species]]" gender="[[characters.gender" image ="[[characters.image]]" origin="[[characters.origin.name]]" descrip="[[characters.created]"></contact-component>
+                <component-card data="[[characters]]"></component-card>
             </template>
         </section>
-    </template>
 
+    </template>
     <script>
         class ComponentList extends Polymer.Element {
             static get is() { return 'component-list'; }
-
         }
-
         window.customElements.define(ComponentList.is, ComponentList);
     </script>
 </dom-module>

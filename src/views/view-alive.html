@@ -3,29 +3,28 @@
 <link rel="import" href="../../src/component/component-list.html">
 
 <dom-module id="view-alive">
-  <template>
-    <style>
-      :host {
-      }
-    </style>
+    <template>
+        <style>
+            :host {
+            }
+        </style>
 
     <iron-ajax
     auto
     url="https://rickandmortyapi.com/api/character/?status=alive"
     handle-as="json"
     last-response={{response}}
-    on-error="onError"></iron-ajax>
+    ></iron-ajax>
 
     <component-list data="{{response}}"></component-list>
 
-  </template>
+    </template>
 
-  <script>
-    class ViewAlive extends Polymer.Element {
-      static get is() { return 'view-alive'; }
+    <script>
+        class ViewAlive extends Polymer.Element {
+        static get is() { return 'view-alive'; }
 
-    }
-
-    window.customElements.define(ViewAlive.is, ViewAlive);
+        }
+        window.customElements.define(ViewAlive.is, ViewAlive);
   </script>
 </dom-module>

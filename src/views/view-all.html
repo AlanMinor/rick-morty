@@ -6,7 +6,6 @@
     <template>
         <style>
             :host {
-
             }
         </style>
 
@@ -15,21 +14,16 @@
             url="https://rickandmortyapi.com/api/character"
             handle-as="json"
             last-response={{response}}
-            on-error="_onError"
         ></iron-ajax>
 
       <component-list data="{{response}}"></component-list>
 
-  </template>
+    </template>
 
-  <script>
-      class ViewAll extends Polymer.Element {
-          static get is() { return 'view-all'; }
-          _onError(e){
-              console.log(e);
-          }
-      }
-
-      window.customElements.define(ViewAll.is, ViewAll);
-  </script>
+    <script>
+        class ViewAll extends Polymer.Element {
+            static get is() { return 'view-all'; }
+        }
+        window.customElements.define(ViewAll.is, ViewAll);
+    </script>
 </dom-module>
