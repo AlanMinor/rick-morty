@@ -1,15 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../styles/shared-styles.html">
-<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../component/contact-components.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../src/component/component-list.html">
 
 <dom-module id="view-alive">
   <template>
     <style include="shared-styles">
       :host {
-        display: block;
-
-        padding: 10px;
       }
     </style>
 
@@ -18,16 +14,17 @@
     url="https://rickandmortyapi.com/api/character/?status=alive"
     handle-as="json"
     last-response={{response}}
-    on-error="onError"></iron-ajax>
+    ></iron-ajax>
 
     <component-list data="{{response}}"></component-list>
-  </template>
 
-  <script>
-    class ViewAlive extends Polymer.Element {
-      static get is() { return 'view-alive'; }
-    }
+    </template>
 
-    window.customElements.define(ViewAlive.is, ViewAlive);
+    <script>
+        class ViewAlive extends Polymer.Element {
+        static get is() { return 'view-alive'; }
+
+        }
+        window.customElements.define(ViewAlive.is, ViewAlive);
   </script>
 </dom-module>

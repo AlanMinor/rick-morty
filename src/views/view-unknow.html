@@ -6,31 +6,24 @@
     <template>
         <style>
             :host {
-              display: block;
-
-              padding: 10px;
             }
-    </style>
+        </style>
 
     <iron-ajax
         auto
         url="https://rickandmortyapi.com/api/character/?status=unknown"
         handle-as="json"
         last-response={{response}}
-        on-error="onError"
     ></iron-ajax>
 
     <component-list data="{{response}}"></component-list>
   </template>
 
-  <script>
-      class ViewUnknow extends Polymer.Element {
-          static get is() { return 'view-unknow'; }
-              onError(err){
-                  console.log('err',err);
-              }
-      }
+    <script>
+        class ViewUnknow extends Polymer.Element {
+            static get is() { return 'view-unknow'; }
 
-      window.customElements.define(ViewUnknow.is, ViewUnknow);
+        }
+        window.customElements.define(ViewUnknow.is, ViewUnknow);
   </script>
 </dom-module>

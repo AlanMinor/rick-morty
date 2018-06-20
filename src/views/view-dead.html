@@ -1,17 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../styles/shared-styles.html">
-<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../component/contact-components.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../src/component/component-list.html">
 
 <dom-module id="view-dead">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
-
-        padding: 10px;
-      }
-    </style>
+    <template>
+        <style >
+          :host {
+          }
+        </style>
 
     <iron-ajax
     auto
@@ -23,11 +19,12 @@
     <component-list data="{{response}}"></component-list>
   </template>
 
-  <script>
-    class ViewDead extends Polymer.Element {
-      static get is() { return 'view-dead'; }
-    }
+    </template>
 
-    window.customElements.define(ViewDead.is, ViewDead);
+    <script>
+        class ViewDead extends Polymer.Element {
+        static get is() { return 'view-dead'; }
+        }
+        window.customElements.define(ViewDead.is, ViewDead);
   </script>
 </dom-module>

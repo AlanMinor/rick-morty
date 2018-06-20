@@ -1,0 +1,79 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<dom-module id="component-card">
+	<template>
+		<style>
+			.paper__card{
+				width: 280px;
+				height: 300px;
+				margin: 20px;
+				box-shadow: 0 0 1px 1px #2e4e89;
+				background-color: #fff;
+				cursor: pointer;
+				overflow: hidden;
+
+				--paper-card-header-image:{
+					--iron-image-height: 150px;
+				};
+			}
+			.paper__card:hover{
+				-webkit-transform: scale(1.02);
+				-moz-transform: scale(1.02);
+				-ms-transform: scale(1.02);
+				-o-transform: scale(1.02);
+				transform: scale(1.02);
+			}
+			.paper__card__header{
+				@apply --paper-font-headline;
+
+			}
+			.paper__card__content__id{
+				float: right;
+				font-size: 15px;
+				vertical-align: middle;
+			}
+			.paper__card__light{
+				color: var(--paper-grey-600);
+			}
+
+		</style>
+
+		<paper-card image="[[data.image]]" class="paper__card" elevation="2">
+			<div class="card-content">
+				<div class="paper__card__header">[[data.name]]
+					<div class="paper__card__content__id paper__card__light">
+						<span>[[data.id]]</span>
+					</div>
+				</div>
+				<p>Status: <span class="paper__card__light">[[data.status]]</span></p>
+				<p class="card__content_specie">Species: <span class="paper__card__light">[[data.species]]</span></p>
+			</div>
+		</paper-card>
+
+	</template>
+	<script>
+		(function contactComponet(){
+			'use strict';
+			class ComponentCard extends Polymer.Element{
+				static get is(){ return 'component-card'}
+				static get properties(){
+					return{
+					}
+				}
+
+                ready(){
+				    super.ready();
+                    this.addEventListener('click', e => this._onClickCard(e));
+				}
+
+                _onClickCard(e){
+                    this.dispatchEvent(new CustomEvent('_onClickCard',{bubbles: true, composed: true,
+						detail:{target:e.target}
+                    }));
+				}
+
+			}
+			customElements.define(ComponentCard.is, ComponentCard)
+		})();
+	</script>
+</dom-module>	
