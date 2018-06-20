@@ -5,18 +5,19 @@
 <dom-module id="view-dead">
     <template>
         <style >
-            :host {
-        }
+          :host {
+          }
         </style>
 
     <iron-ajax
-      auto
-      url="https://rickandmortyapi.com/api/character/?status=dead"
-      handle-as="json"
-      last-response={{response}}
-    ></iron-ajax>
+    auto
+    url="https://rickandmortyapi.com/api/character/?status=dead"
+    handle-as="json"
+    last-response={{response}}
+    on-error="onError"></iron-ajax>
 
     <component-list data="{{response}}"></component-list>
+  </template>
 
     </template>
 

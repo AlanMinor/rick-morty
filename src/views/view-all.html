@@ -2,28 +2,33 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../src/component/component-list.html">
 
+
 <dom-module id="view-all">
-    <template>
-        <style>
-            :host {
-            }
-        </style>
+  <template>
+    <style >
+      :host {
+      }
+    </style>
 
-        <iron-ajax
-            auto
-            url="https://rickandmortyapi.com/api/character"
-            handle-as="json"
-            last-response={{response}}
-        ></iron-ajax>
+    <iron-ajax
+    auto
+    url="https://rickandmortyapi.com/api/character"
+    handle-as="json"
+    last-response={{response}}
+    on-error="onError"></iron-ajax>
 
-      <component-list data="{{response}}"></component-list>
+    <component-list data="{{response}}"></component-list>
+  </template>
 
-    </template>
+  <script>
+    class ViewAll extends Polymer.Element {
+      static get is() { return 'view-all'; }
 
-    <script>
-        class ViewAll extends Polymer.Element {
-            static get is() { return 'view-all'; }
-        }
-        window.customElements.define(ViewAll.is, ViewAll);
-    </script>
+      onError(e){
+          console.log(e);
+      }
+    }
+
+    window.customElements.define(ViewAll.is, ViewAll);
+  </script>
 </dom-module>
