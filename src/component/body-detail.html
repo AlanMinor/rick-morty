@@ -1,0 +1,77 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="body-detail">
+	<template>
+		<style>
+		:host{
+			width: 800px;
+			height: 800px;
+			color: #fff;
+		}
+		.content {
+			display: grid;
+			grid-template-columns: 1fr 2fr; 
+			border-radius: 5px;	    
+			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+		}
+
+		.con{	    
+			padding: 10px;
+		}
+
+		.img{
+			height: 100%;
+			width: 100%;
+			border-radius: 20px;
+		}
+
+		.description{
+			display: grid;	
+			background-color: rgb(88, 172, 241);
+			margin: 10px;
+			border-radius: 20px;
+			grid-template-columns: 1f 1f;
+			text-align: center;
+		}
+		.name{
+			text-align: left;
+			padding-left: 15px;
+		}
+		.status{
+			text-align:center;
+			
+		}
+
+		</style>
+			<div class="content">
+				<div class="con">
+					<img class="img" src="https://rickandmortyapi.com/api/character/avatar/1.jpeg">
+				</div>
+				<div class="description">
+						<h1 class="name">[[name]]</h1>
+						<h3 class="status">[[episode]]</h3>
+				</div>
+			</div>
+	</template>
+	<script>
+		(function bodyDetail(){
+			'use strict';
+			class BodyDetail extends Polymer.Element{
+				static get is(){ return 'body-detail'}
+				static get properties(){
+					return{
+						name:{
+							type: String,
+							value: "Cyntia"
+						},
+						episode:{
+							type: String,
+							value: "Dead"
+						}
+				};
+			}
+		}
+		customElements.define(BodyDetail.is, BodyDetail)
+		})();
+	</script>
+</dom-module>	
