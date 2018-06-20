@@ -17,18 +17,10 @@
     auto
     url="https://rickandmortyapi.com/api/character/?status=alive"
     handle-as="json"
-    on-response="handleResponse"
-    last-response={{characterLisr}}
+    last-response={{response}}
     on-error="onError"></iron-ajax>
 
-    <template is="dom-repeat" items="[[characterLisr.results]]" as="characters">
-        <!--AQUI VA EL COMPONENTE DE LA CARD CON SUS PROPIEDADES-->
-        <div class="este">
-            <contact-component name="[[characters.name]]" status="[[characters.status]]" specie="[[characters.species]]" gender="[[characters.gender" image ="[[characters.image]]" origin="[[characters.origin.name]]" descrip="[[characters.created]"></contact-component>
-        </div>
-        
-    </template>
-
+    <component-list data="{{response}}"></component-list>
   </template>
 
   <script>
