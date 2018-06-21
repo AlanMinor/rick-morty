@@ -1,16 +1,23 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<!--<link rel="import" href="header-detail.html">-->
+<link rel="import" href="header-detail.html">
+<link rel="import" href="body-detail.html">
 
 <dom-module id="component-detail">
     <template>
         <style>
             :host {
             }
+            div{
+                background-color: #BDBDBD;
+                /* background-image: url("/src/img/con.jpg"); */
+            }
         </style>
 
-        <h1>Este es el componente de detalle</h1>
-
-        <!--<header-detail></header-detail>-->
+        <div>
+            <header-detail></header-detail>
+            <body-detail></body-detail>
+        </div>
+        
     </template>
 
     <script>
