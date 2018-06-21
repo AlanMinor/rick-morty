@@ -1,0 +1,27 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="view-dashboard">
+    <template>
+        <style>
+            :host {
+            }
+        </style>
+
+        <h1>Este es el dashboard</h1>
+
+    </template>
+
+    <script>
+        class ViewDashboard extends Polymer.Element{
+            static get is(){ return 'view-dashboard'; }
+            static get observers() {
+                return [
+                    '_verData(data)'
+
+                ]
+            }
+
+        }
+        window.customElements.define(ViewDashboard.is, ViewDashboard);
+    </script>
+</dom-module>

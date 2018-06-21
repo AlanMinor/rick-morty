@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+
+<dom-module id="view-detail">
+    <template>
+        <style>
+            :host {
+            }
+        </style>
+
+        <app-route
+                route="[[route]]"
+                pattern="/:status/:item"
+                data="{{routeData}}"
+        ></app-route>
+
+        <iron-meta id="meta"></iron-meta>
+
+        <p>Name: {{data.name}}</p>
+        <p>Status: [[data.status]]</p>
+        <p>Species: [[data.species]]</p>
+
+        <!-- Aqui se debe de poner el componente de detalle -->
+
+    </template>
+
+    <script>
+        class ViewDetail extends Polymer.Element {
+            static get is() { return 'view-detail'; }
+            static get properties() {
+                return {
+                    item: Object,
+
+                    route: Object,
+
+                    routeData: Object,
+
+                    visible: {
+                        type: Boolean,
+                        value: false
+                    },
+                    data:{
+                        type: Object
+                    }
+                };
+            }
+            static get observers() {
+                return [
+                    '_itemChanged(routeData,item, visible)'
+                ]
+            }
+            _itemChanged(route,item, visible) {
+                //console.log("_itemChanged",route,item,visible);
+                if (visible) {
+                    this._itemChangeDebouncer = Polymer.Debouncer.debounce(this._itemChangeDebouncer,
+                        Polymer.Async.microTask, () => {
+                            this.dispatchEvent(new CustomEvent('change-section', {
+                                bubbles: true, composed: true, detail: {
+                                    category: item ? item.category : '',
+                                    title: item ? item.title : ''
+                                }}));
+                        })
+                }
+            }
+            _setDetail(){
+                const data = this.$.meta.byKey('detail');
+                this.set('data',data);
+                console.log("Detalles",data);
+            }
+
+        }
+        window.customElements.define(ViewDetail.is, ViewDetail);
+    </script>
+</dom-module>

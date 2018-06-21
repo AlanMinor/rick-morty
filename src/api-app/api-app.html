@@ -18,11 +18,18 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../icons/app-icons.html">
-<link rel="lazy-import" href="../views/view-all.html">
+
+
+<link rel="import" href="../views/view-dashboard.html">
+<link rel="lazy-import" href="../views/view-detail.html">
+
+
+<!--<link rel="lazy-import" href="../views/view-all.html">
 <link rel="lazy-import" href="../views/view-alive.html">
 <link rel="lazy-import" href="../views/view-dead.html">
 <link rel="lazy-import" href="../views/view-unknow.html">
 <link rel="lazy-import" href="../views/view-page404.html">
+<link rel="lazy-import" href="../component/component-detail.html">-->
 
 <dom-module id="api-app">
     <template>
@@ -76,6 +83,9 @@
             .app__header__toolbar--center{
                 background-color: var(--light-primary-color);
                 justify-content: center;
+            }
+            app-drawer-layout{
+                z-index: 1;
             }
             .paper__icon__button__menu{
                 color: var(--text-primary-color);
@@ -167,7 +177,7 @@
 
         <app-drawer-layout force-narrow>
             <app-header-layout>
-                <app-header class="app__header" slot="header">
+                <app-header id="header" class="app__header" slot="header">
                     <app-toolbar class="app__header__toolbar">
                         <paper-icon-button class="paper__icon__button__menu" icon="app-icons:menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
                         <div class="app__header__title" main-title>
@@ -176,13 +186,13 @@
                     </app-toolbar>
                     <app-toolbar class="app__header__toolbar--center" hidden$="{{!wideLayout}}">
                         <!-- Nav en el escritorio: Pestañas -->
-                        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                        <iron-selector selected="[[statusList]]" attr-for-selected="name" class="drawer-list" role="navigation">
 
                             <div class="tabs">
                                 <template is="dom-repeat" items="{{items}}">
 
                                     <div class="tab">
-                                        <a name="[[item]]" href="/[[item]]" class="paper__item__link">[[item]]</a>
+                                        <a name="[[item]]" href="/list/[[item]]" class="paper__item__link">[[item]]</a>
                                     </div>
                                 </template>
                             </div>
@@ -192,14 +202,14 @@
                 </app-header>
             </app-header-layout>
             <!-- Menu aside para dispositivos-->
-            <app-drawer id="drawer" slot="drawer">
+            <app-drawer id="drawer" slot="drawer"><component-list data="{{response}}"></component-list><component-list data="{{response}}"></component-list>
                 <app-toolbar class="app__drawer__toolbar">Menu</app-toolbar>
                 <!-- Nav en el dispositivo: side nav menu -->
-                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                <iron-selector selected="[[statusList]]" attr-for-selected="name" class="drawer-list" role="navigation">
                     <template is="dom-repeat" items="{{items}}">
                         <paper-icon-item name$="{{item}}" class="paper__item">
                             <iron-icon icon="app-icons:{{item}}" slot="item-icon"></iron-icon>
-                            <a name="[[item]]" href="/[[item]]" class="paper__item__link">[[item]]</a>
+                            <a name="[[item]]" href="/list/[[item]]" class="paper__item__link">[[item]]</a>
                         </paper-icon-item>
                     </template>
                 </iron-selector>
@@ -213,10 +223,13 @@
                 fallback-selection="page404"
                 role="main">
 
-            <view-all name="all"></view-all>
-            <view-alive name="alive"></view-alive>
-            <view-dead name="dead"></view-dead>
-            <view-unknow name="unknow"></view-unknow>
+            <!-- Vista de dashboard  -->
+            <view-dashboard name="home" ></view-dashboard>
+            <!-- Vista de lista de personajes en una categoría -->
+            <view-list name="list" route="[[subroute]]" ></view-list>
+            <!-- vista detallada de un personaje -->
+            <view-detail name="detail" route="[[subroute]]" id="viewDetailPage"></view-detail>
+
             <view-page404 name="page404"></view-page404>
 
         </iron-pages>
@@ -247,53 +260,77 @@
                     },
                     routeData: Object,
                     subroute: Object,
-
                     items: {
                         type: Array,
                         value: function () {
                             return ['all', 'alive', 'dead', 'unknow'];
                         }
                     },
-
-                    /*selected: {type: String, value: 'All'},*/
                     wideLayout: {
                         type: Boolean,
                         value: false,
                         observer: 'onLayoutChange',
                     },
+                    data: Object,
+                    statusList:{
+                        type: String,
+                        value: ''
+                    }
                 };
             }
 
             static get observers() {
                 return [
                     '_routePageChanged(routeData.page)'
-
                 ]
+            }
+            ready(){
+                super.ready();
+                this.addEventListener('change-section', (e)=>this._onChangeSection(e));
+                this.addEventListener('show-invalid-url-warning', (e)=>this._onFallbackSelectionTriggered(e));
+                this.addEventListener('_sendDetail', e => this._sendDetail(e));
             }
 
             _routePageChanged(page) {
-                // If no page was found in the route data, page will be an empty string.
-                // Default to 'view1' in that case.
-                this.page = page || 'all';
+                this.page = page || 'home';
             }
 
-            _pageChanged(page) {
+            _pageChanged(page,oldPage) {
 
-                console.log('_pageChanged',page);
-                // Load page import on demand. Show 404 page if fails
-                const resolvedPageUrl = this.resolveUrl('../views/view-' + page + '.html');
+                //console.log("page",page,oldPage);
 
-                Polymer.importHref(
-                    resolvedPageUrl,
-                    null,
-                    this._showPage404.bind(this),
-                    true);
+                if (page != null) {
+                    // home route is eagerly loaded
+                    if (page == 'home') {
+                        this._pageLoaded(Boolean(oldPage));
+                    } else {
+                        //Polymer.importHref(href, onload, onerror, optAsync){}
+                        Polymer.importHref(
+                            this.resolveUrl('../views/view-' + page + '.html'),
+                            ()=> {
+                                if(page==="detail"){
+                                    const page_detail = this.$.viewDetailPage;
+                                    page_detail._setDetail();
+                                }
+                            }, null, true);
+                    }
+                }
             }
+            _pageLoaded(shouldResetLayout) {
 
-            _showPage404() {
+                if (shouldResetLayout) {
+                    Polymer.Async.timeOut.run(() => {
+                        this.$.header.resetLayout();
+                    }, 1);
+                }
+            }
+            _onChangeSection(event) {
+                let detail = event.detail;
+                this.statusList = detail.status || '';
+            }
+            _onFallbackSelectionTriggered() {
                 this.page = 'page404';
             }
-
             onLayoutChange(wide) {
                 let drawer = this.$.drawer;
 
@@ -301,11 +338,7 @@
                     drawer.opened = false;
                 }
             }
-            _clickTabSelector(e){
-                this.routeData.page = this.page;
-            }
         }
-
     window.customElements.define(ApiApp.is, ApiApp);
   </script>
 </dom-module>

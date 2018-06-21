@@ -1,0 +1,127 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../component/component-card.html">
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+
+<dom-module id="view-list">
+    <template>
+        <style>
+            :host {
+            }
+            .section{
+                position: fixed;
+                left: 0;
+                top: 130px;
+                bottom: 0;
+                right: 0;
+                margin: 10px;
+                padding: 10px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                -ms-flex-direction: row;
+                -webkit-flex-direction: row;
+                flex-direction: row;
+                -ms-flex-wrap: wrap;
+                -webkit-flex-wrap: wrap;
+                flex-wrap: wrap;
+                -ms-flex-pack: justify;
+                -webkit-justify-content: space-between;
+                justify-content: space-between;
+                list-style: none;
+            }
+        </style>
+
+        <iron-meta key="detail" value="{{details}}"></iron-meta>
+
+        <app-route
+                route="[[route]]"
+                pattern="/:status"
+                data="{{routeData}}"
+        ></app-route>
+
+        <iron-ajax
+                auto
+                url="[[_validateStatus(routeData.status)]]"
+                handle-as="json"
+                last-response={{data}}
+        ></iron-ajax>
+
+        <section class="section">
+            <template is="dom-repeat" items="[[data.results]]" as="character" id="template_card">
+                <a href$="/detail/[[routeData.status]]/[[character.name]]" >
+                    <component-card data="[[character]]"></component-card>
+                </a>
+            </template>
+        </section>
+
+
+    </template>
+
+    <script>
+        class ViewList extends Polymer.Element{
+            static get is(){ return 'view-list'; }
+            static get properties() {
+                return {
+                    route: Object,
+                    routeData: Object,
+                    visible: {
+                        type: Boolean,
+                        value: false
+                    },
+                    details:{
+                        type: Object
+                    }
+                };
+            }
+            static get observers() {
+                return [
+                    '_categoryChanged(routeData.status, visible)'
+                ]
+            }
+            ready(){
+                super.ready();
+                this.addEventListener('_onClickCard', e => this._onClickCard(e));
+            }
+            _categoryChanged(status, visible) {
+
+                if (!visible) {
+                    return;
+                }
+
+                this._changeSectionDebouncer = Polymer.Debouncer.debounce(this._changeSectionDebouncer,
+                    Polymer.Async.microTask, () => {
+                        if (status) {
+                            // Notify the category and the page's title
+                            this.dispatchEvent(new CustomEvent('change-section', {
+                                bubbles: true, composed: true, detail: {
+                                    status: status
+                                }}));
+                        } else {
+                            this.dispatchEvent(new CustomEvent('show-invalid-url-warning', {
+                                bubbles: true, composed: true}));
+                        }
+                    });
+            }
+            _validateStatus(status){
+                let url = '';
+                if(status === 'all'){
+                    url = 'https://rickandmortyapi.com/api/character'
+                }else{
+                    url = `https://rickandmortyapi.com/api/character/?status=${status}`;
+                }
+                return url;
+            }
+            _onClickCard(e){
+                const data = this.$.template_card.itemForElement(e.detail.target);
+                this.set('details',data);
+            }
+
+
+        }
+        window.customElements.define(ViewList.is, ViewList);
+    </script>
+</dom-module>
