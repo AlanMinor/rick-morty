@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="/src/component/component-detail.html">
 
 <dom-module id="view-detail">
     <template>
@@ -17,11 +18,7 @@
 
         <iron-meta id="meta"></iron-meta>
 
-        <p>Name: {{data.name}}</p>
-        <p>Status: [[data.status]]</p>
-        <p>Species: [[data.species]]</p>
-
-        <!-- Aqui se debe de poner el componente de detalle -->
+        <component-detail data="[[data]]"></component-detail>
 
     </template>
 

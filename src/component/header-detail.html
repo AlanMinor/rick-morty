@@ -65,19 +65,19 @@
         font-size: 12px;
         color: black;
         text-align: center;
-        padding-top: 5px;
+        padding-top: 3px;
         opacity: .6;
         -webkit-transition: padding-top .4s;
       }
 
       #content_info:hover{
-        height: 180px;
+        height: 168px;
       }
 
       #content_info:hover p{
         padding-top: 15px;
         opacity: 1;
-        font-size: 15px;
+        font-size: 13px;
       }
 
       #content_info:hover #icon{
@@ -89,27 +89,27 @@
     <div class="heder_detail">
         <div id="content_info" class="status">
           <img id="icon" src="/src/img/usuario.png">
-          <p>Status: [[status]]</p>
+          <p>Status: [[data.status]]</p>
         </div>
         <div id="content_info" class="specie">
           <img id="icon" src="/src/img/red.png">
-          <p>Specie: [[specie]]</p>
+          <p>Specie: [[data.species]]</p>
         </div>
         <div id="content_info" class="gender">
           <img id="icon" src="/src/img/usuarios.png">
-          <p>Gender: [[gender]]</p>
+          <p>Gender: [[data.gender]]</p>
         </div>
         <div id="content_info" class="origin">
           <img id="icon" src="/src/img/el-planeta-tierra.png">
-          <p>Origin: [[origin]]</p>
+          <p>Origin: [[data.origin.name]]</p>
         </div>
         <div id="content_info" class="location">
           <img id="icon" src="/src/img/casa.png">
-          <p>Location: [[location]]</p>
+          <p>Location: [[data.location.name]]</p>
         </div>
         <div id="content_info" class="description">
           <img id="icon" src="/src/img/ayudar.png">
-          <p>Created: [[created]]</p>
+          <p>Chapters: [[data.episode.length]]</p>
         </div>
     </div>
 
@@ -118,35 +118,6 @@
   <script>
     class HeaderDetail extends Polymer.Element {
       static get is() { return 'header-detail'; }
-
-      /*static get properties(){
-					return{
-            status: {
-              type: String,
-              value: ''
-            },
-            specie: {
-              type: String,
-              value: ''
-            },
-            gender: {
-              type: String,
-              value: ''
-            },
-            origin: {
-              type: String,
-              value: ''
-            },
-            location: {
-              type: String,
-              value: ''
-            },
-            created: {
-              type: String,
-              value: ''
-            }
-					};
-				}*/
     }
 
     window.customElements.define(HeaderDetail.is, HeaderDetail);
