@@ -21,6 +21,7 @@
 
 
 <link rel="import" href="../views/view-dashboard.html">
+<link rel="lazy-import" href="../views/view-detail.html">
 
 
 <!--<link rel="lazy-import" href="../views/view-all.html">
@@ -227,17 +228,9 @@
             <!-- Vista de lista de personajes en una categoría -->
             <view-list name="list" route="[[subroute]]" ></view-list>
             <!-- vista detallada de un personaje -->
-            <view-detail name="detail" route="[[subroute]]" ></view-detail>
+            <view-detail name="detail" route="[[subroute]]" id="viewDetailPage"></view-detail>
 
             <view-page404 name="page404"></view-page404>
-
-            <!--<view-all name="all"></view-all>
-            <view-alive name="alive"></view-alive>
-            <view-dead name="dead"></view-dead>
-            <view-unknow name="unknow"></view-unknow>
-            <view-page404 name="page404"></view-page404>-->
-
-            <!--<component-detail data="[[data]]" name="detail" route="[[subroute]]"></component-detail>-->
 
         </iron-pages>
 
@@ -279,7 +272,6 @@
                         observer: 'onLayoutChange',
                     },
                     data: Object,
-
                     statusList:{
                         type: String,
                         value: ''
@@ -296,7 +288,7 @@
                 super.ready();
                 this.addEventListener('change-section', (e)=>this._onChangeSection(e));
                 this.addEventListener('show-invalid-url-warning', (e)=>this._onFallbackSelectionTriggered(e));
-                this.addEventListener('_showDetail', e => this._showDetail(e));
+                this.addEventListener('_sendDetail', e => this._sendDetail(e));
             }
 
             _routePageChanged(page) {
@@ -305,22 +297,25 @@
 
             _pageChanged(page,oldPage) {
 
-                console.log("page",page,oldPage);
+                //console.log("page",page,oldPage);
 
                 if (page != null) {
                     // home route is eagerly loaded
                     if (page == 'home') {
                         this._pageLoaded(Boolean(oldPage));
                     } else {
-                        // Cuando una carga falló, activó un 404 lo que significa que tenemos que cargar ansiosamente la definición de la página 404
-                        let cb = this._pageLoaded.bind(this, Boolean(oldPage));
+                        //Polymer.importHref(href, onload, onerror, optAsync){}
                         Polymer.importHref(
                             this.resolveUrl('../views/view-' + page + '.html'),
-                            cb, cb, true);
+                            ()=> {
+                                if(page==="detail"){
+                                    const page_detail = this.$.viewDetailPage;
+                                    page_detail._setDetail();
+                                }
+                            }, null, true);
                     }
                 }
             }
-
             _pageLoaded(shouldResetLayout) {
 
                 if (shouldResetLayout) {
@@ -329,17 +324,13 @@
                     }, 1);
                 }
             }
-
             _onChangeSection(event) {
                 let detail = event.detail;
                 this.statusList = detail.status || '';
             }
-
             _onFallbackSelectionTriggered() {
                 this.page = 'page404';
             }
-
-
             onLayoutChange(wide) {
                 let drawer = this.$.drawer;
 
@@ -347,16 +338,7 @@
                     drawer.opened = false;
                 }
             }
-
-            _showDetail(e){
-                this.set('data',e.detail.data);
-                location.href =`/detail/${e.detail.data.name}`;
-                console.log("data",this.data);
-
-            }
-
         }
-
     window.customElements.define(ApiApp.is, ApiApp);
   </script>
 </dom-module>

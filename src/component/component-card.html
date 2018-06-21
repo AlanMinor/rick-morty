@@ -73,6 +73,7 @@
 				}
 
                 _onClickCard(e){
+
                     this.dispatchEvent(new CustomEvent('_onClickCard',{bubbles: true, composed: true,
 						detail:{target:e.target}
                     }));

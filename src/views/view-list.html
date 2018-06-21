@@ -1,14 +1,41 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../src/component/component-list.html">
+<link rel="import" href="../component/component-card.html">
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
 
 <dom-module id="view-list">
     <template>
         <style>
             :host {
             }
+            .section{
+                position: fixed;
+                left: 0;
+                top: 130px;
+                bottom: 0;
+                right: 0;
+                margin: 10px;
+                padding: 10px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                -ms-flex-direction: row;
+                -webkit-flex-direction: row;
+                flex-direction: row;
+                -ms-flex-wrap: wrap;
+                -webkit-flex-wrap: wrap;
+                flex-wrap: wrap;
+                -ms-flex-pack: justify;
+                -webkit-justify-content: space-between;
+                justify-content: space-between;
+                list-style: none;
+            }
         </style>
+
+        <iron-meta key="detail" value="{{details}}"></iron-meta>
 
         <app-route
                 route="[[route]]"
@@ -20,10 +47,17 @@
                 auto
                 url="[[_validateStatus(routeData.status)]]"
                 handle-as="json"
-                last-response={{response}}
+                last-response={{data}}
         ></iron-ajax>
 
-        <component-list data="{{response}}"></component-list>
+        <section class="section">
+            <template is="dom-repeat" items="[[data.results]]" as="character" id="template_card">
+                <a href$="/detail/[[routeData.status]]/[[character.name]]" >
+                    <component-card data="[[character]]"></component-card>
+                </a>
+            </template>
+        </section>
+
 
     </template>
 
@@ -37,6 +71,9 @@
                     visible: {
                         type: Boolean,
                         value: false
+                    },
+                    details:{
+                        type: Object
                     }
                 };
             }
@@ -44,6 +81,10 @@
                 return [
                     '_categoryChanged(routeData.status, visible)'
                 ]
+            }
+            ready(){
+                super.ready();
+                this.addEventListener('_onClickCard', e => this._onClickCard(e));
             }
             _categoryChanged(status, visible) {
 
@@ -73,6 +114,10 @@
                     url = `https://rickandmortyapi.com/api/character/?status=${status}`;
                 }
                 return url;
+            }
+            _onClickCard(e){
+                const data = this.$.template_card.itemForElement(e.detail.target);
+                this.set('details',data);
             }
 
 
